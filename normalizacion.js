@@ -45,3 +45,5 @@ obtenerPersonajes(i).then((datos) => {
   console.log(datos);
   console.log("Pagina " + i);
 });
+
+module.exports = {obtenerPaginas, obtenerPersonajes}
