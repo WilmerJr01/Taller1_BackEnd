@@ -25,4 +25,29 @@ async function obtenerInfoPagina(numeroPagina) {
   }
 }
 
+<<<<<<< Updated upstream
 module.exports = {obtenerPaginas, obtenerInfoPagina}
+=======
+async function obtenerInfoTotal (numeroPaginas = 5, totalPaginas = 0) {
+  if (totalPaginas === 0) {
+    totalPaginas = await obtenerPaginas();
+  }
+  let personajesTotales = [];
+  for (let i = 1; i <= totalPaginas; i += numeroPaginas) {
+    let lote = [];
+    for (let j = i; j < i + numeroPaginas && j <= totalPaginas; j++) {
+      lote.push(obtenerInfoPagina(j));
+    }
+    const personajesLote = await Promise.all(lote)
+    personajesTotales = personajesTotales.concat(...personajesLote);
+
+    await new Promise((r) => setTimeout(r, 2000));
+  }
+  return personajesTotales;
+}
+
+obtenerInfoTotal().then((personajes) => {
+  console.log(personajes.length);
+});
+module.exports = {obtenerPaginas, obtenerInfoPagina, obtenerInfoTotal}
+>>>>>>> Stashed changes
