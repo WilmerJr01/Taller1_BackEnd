@@ -25,7 +25,10 @@ async function obtenerInfoPagina(numeroPagina) {
   }
 }
 
-module.exports = {obtenerPaginas, obtenerInfoPagina}
+async function obtenerInfoTotal (numeroPaginas = 5, totalPaginas = 0) {
+  if (totalPaginas === 0) {
+    totalPaginas = await obtenerPaginas();
+  }
   let personajesTotales = [];
   for (let i = 1; i <= totalPaginas; i += numeroPaginas) {
     let lote = [];
@@ -39,8 +42,4 @@ module.exports = {obtenerPaginas, obtenerInfoPagina}
   }
   return personajesTotales;
 }
-
-obtenerInfoTotal().then((personajes) => {
-  console.log(personajes.length);
-});
 module.exports = {obtenerPaginas, obtenerInfoPagina, obtenerInfoTotal}
