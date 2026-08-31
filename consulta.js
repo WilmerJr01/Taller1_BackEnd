@@ -94,6 +94,7 @@ async function ejecutarConsultas() {
 
   return {
     filtroVivosYHumanos: filtrarPersonajesVivosYHumanos(personajes),
+    cantidadVivosYHumanos: filtrarPersonajesVivosYHumanos(personajes).length,
     filtroMasDe20Episodios: filtrarPersonajesCon20OMasEpisodios(personajes),
     primerAlienFemale: encontrarPrimerAlienFemale(personajes),
     existeTipoInformacion: existeTipoConInformacion(personajes),
