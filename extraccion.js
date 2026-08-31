@@ -19,19 +19,13 @@ async function obtenerInfoPagina(numeroPagina) {
       throw new Error(`Error: ${respuesta.status}`);
     }
     const datos = await respuesta.json();
-    return datos;
+    return datos.results;
   } catch (error) {
     console.log(`Error ${error}`)
   }
 }
 
-<<<<<<< Updated upstream
 module.exports = {obtenerPaginas, obtenerInfoPagina}
-=======
-async function obtenerInfoTotal (numeroPaginas = 5, totalPaginas = 0) {
-  if (totalPaginas === 0) {
-    totalPaginas = await obtenerPaginas();
-  }
   let personajesTotales = [];
   for (let i = 1; i <= totalPaginas; i += numeroPaginas) {
     let lote = [];
@@ -50,4 +44,3 @@ obtenerInfoTotal().then((personajes) => {
   console.log(personajes.length);
 });
 module.exports = {obtenerPaginas, obtenerInfoPagina, obtenerInfoTotal}
->>>>>>> Stashed changes
