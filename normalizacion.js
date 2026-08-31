@@ -1,4 +1,4 @@
-async function obtenerPersonajes(dataPagina) {
+async function normalizarPersonajes(dataPagina) {
   try {
     const personajes = dataPagina.map((personaje) => {
       return {
@@ -20,4 +20,4 @@ async function obtenerPersonajes(dataPagina) {
   }
 }
 
-module.exports = {obtenerPersonajes, obtenerTodosPersonajes}
+module.exports = {normalizarPersonajes}
