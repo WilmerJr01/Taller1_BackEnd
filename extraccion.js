@@ -25,8 +25,7 @@ async function obtenerInfoPagina(numeroPagina) {
   }
 }
 
-async function obtenerInfoTotal (numeroPaginas = 5) {
-  const totalPaginas = await obtenerPaginas();
+module.exports = {obtenerPaginas, obtenerInfoPagina}
   let personajesTotales = [];
   for (let i = 1; i <= totalPaginas; i += numeroPaginas) {
     let lote = [];
