@@ -1,33 +1,18 @@
 const API_URL = "https://rickandmortyapi.com/api/character";
 
 
-async function obtenerPagina(pagina, intentos = 5) {
+async function obtenerPagina(pagina) {
     const respuesta = await fetch(`${API_URL}?page=${pagina}`);
 
     if (respuesta.ok) {
         return await respuesta.json();
     }
 
-    if (respuesta.status === 429 && intentos > 0) {
-
-        const espera = (6 - intentos) * 2000;
-
-        console.log(
-            `Página ${pagina}: Too Many Requests. ` +
-            `Reintentando en ${espera / 1000} segundos...`
-        );
-
-        await new Promise(resolve =>
-            setTimeout(resolve, espera)
-        );
-
-        return obtenerPagina(pagina, intentos - 1);
-    }
-
     throw new Error(
         `Error ${respuesta.status} al obtener la página ${pagina}`
     );
 }
+
 /*
  * ESTRATEGIA 1:
  * Consultas secuenciales
@@ -45,6 +30,10 @@ async function obtenerSecuencial() {
         const datos = await obtenerPagina(pagina);
 
         personajes.push(...datos.results);
+
+        await new Promise(resolve =>
+            setTimeout(resolve, 500)
+        );
     }
 
     return personajes;
@@ -84,6 +73,10 @@ async function obtenerConcurrente() {
 
         const resultados = await Promise.all(peticiones);
 
+        await new Promise(resolve =>
+            setTimeout(resolve, 2000)
+        );
+
         resultados.forEach(datos => {
             personajes.push(...datos.results);
         });
@@ -96,11 +89,6 @@ async function obtenerConcurrente() {
  * COMPARACIÓN DE TIEMPOS
  */
 async function ejecutarPruebas() {
-
-    console.log("=================================");
-    console.log("ESTRATEGIA 1 - SECUENCIAL");
-    console.log("=================================");
-
     const inicioSecuencial = performance.now();
 
     const personajesSecuencial = await obtenerSecuencial();
@@ -109,19 +97,6 @@ async function ejecutarPruebas() {
 
     const tiempoSecuencial =
         finSecuencial - inicioSecuencial;
-
-    console.log(
-        `Personajes obtenidos: ${personajesSecuencial.length}`
-    );
-
-    console.log(
-        `Tiempo: ${tiempoSecuencial.toFixed(2)} ms`
-    );
-
-
-    console.log("\n=================================");
-    console.log("ESTRATEGIA 2 - CONCURRENTE");
-    console.log("=================================");
 
     const inicioConcurrente = performance.now();
 
@@ -132,33 +107,33 @@ async function ejecutarPruebas() {
     const tiempoConcurrente =
         finConcurrente - inicioConcurrente;
 
-    console.log(
-        `Personajes obtenidos: ${personajesConcurrente.length}`
-    );
-
-    console.log(
-        `Tiempo: ${tiempoConcurrente.toFixed(2)} ms`
-    );
-
-
-    console.log("\n=================================");
-    console.log("COMPARACIÓN");
-    console.log("=================================");
+    let respuestaMasRapida = ''
 
     if (tiempoSecuencial < tiempoConcurrente) {
-
-        console.log("La estrategia secuencial fue más rápida.");
-
+        respuestaMasRapida = "La estrategia secuencial fue más rápida."
     } else if (tiempoConcurrente < tiempoSecuencial) {
-
-        console.log("La estrategia concurrente fue más rápida.");
-
+        respuestaMasRapida = "La estrategia concurrente fue más rápida."
     } else {
-
-        console.log("Ambas estrategias tuvieron el mismo tiempo.");
-
+        respuestaMasRapida = "Ambas estrategias tuvieron el mismo tiempo."
     }
+
+    return (` 
+    <h2> ================================= </h2>
+    <h1>ESTRATEGIA 1 - SECUENCIAL</h1>
+    <h2>=================================</h2>
+    <p>Personajes obtenidos: ${personajesSecuencial.length}</p>
+    <p>Tiempo: ${tiempoSecuencial.toFixed(2)} ms</p>
+    <h2>=================================</h2>
+    <h1>ESTRATEGIA 2 - CONCURRENTE</h1>
+    <h2>=================================</h2>
+    <p>Personajes obtenidos: ${personajesConcurrente.length}</p>
+    <p>Tiempo: ${tiempoConcurrente.toFixed(2)} ms</p>
+    <h2>=================================</h2>
+    <h1>COMPARACIÓN</h1>
+    <h2>=================================</h2>
+    <p>${respuestaMasRapida}</p>
+    `
+    )
 }
 
-
-ejecutarPruebas();
+module.exports = { ejecutarPruebas }
