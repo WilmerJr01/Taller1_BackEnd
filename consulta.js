@@ -1,4 +1,5 @@
-const { obtenerTodosLosPersonajes } = require("./normalizacion.js");
+const { obtenerInfoTotal } = require("./extraccion.js");
+const { normalizarPersonajes } = require("./normalizacion.js");
 
 function filtrarPersonajesVivosYHumanos(personajes) {
   return personajes.filter(
@@ -90,7 +91,8 @@ function clasificarPorCantidadEpisodios(personajes) {
 }
 
 async function ejecutarConsultas() {
-  const personajes = await obtenerTodosLosPersonajes();
+  const datosPersonajes = await obtenerInfoTotal();
+  const personajes = await normalizarPersonajes(datosPersonajes);
 
   return {
     filtroVivosYHumanos: filtrarPersonajesVivosYHumanos(personajes),
