@@ -8,6 +8,7 @@ const { filtrarPersonajesVivosYHumanos,
     todosTienenImagenYAlMenosUnEpisodio,
     resumirPorEspecie,
     clasificarPorCantidadEpisodios} = require('./consulta.js');
+const {ejecutarPruebas} = require('./estadistica.js')
 
 const app = express()
 
@@ -20,6 +21,10 @@ async function globales() {
     data = await obtenerInfoTotal();
     normalizados = await normalizarPersonajes(data);
 }
+
+app.get('/', (req, res)=>{
+    res.send('<h1>API DESPLEGADA CON EXITO </h1>')
+})
 
 app.get('/TodosLosDatos/Normalizados', (req, res) => {
     res.send(normalizados)
@@ -55,6 +60,10 @@ app.get('/Consultas/AgruparPorEspecie', (req, res) =>{
 
 app.get('/Consultas/CalificarPorEpisodios', (req, res) => {
     res.send(clasificarPorCantidadEpisodios(normalizados))
+})
+
+app.get('/Pruebas', async (req, res) =>{
+    res.send(await ejecutarPruebas())
 })
 
 async function iniciarServidor() {
