@@ -107,16 +107,6 @@ async function ejecutarConsultas() {
   };
 }
 
-if (require.main === module) {
-  ejecutarConsultas()
-    .then((resultado) => {
-      console.log(JSON.stringify(resultado, null, 2));
-    })
-    .catch((error) => {
-      console.error("Error al ejecutar las consultas:", error);
-    });
-}
-
 module.exports = {
   filtrarPersonajesVivosYHumanos,
   filtrarPersonajesCon20OMasEpisodios,
